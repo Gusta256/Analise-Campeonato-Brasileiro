@@ -1,0 +1,41 @@
+/*CREATE VIEW PontosV2 AS (SELECT c.home_team_name as Nome, sum(c.Pontos_mandante) PtsCasa, f.PtsFora, (sum(c.Pontos_mandante) + PtsFora) as TotalPontos
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2] c
+LEFT JOIN (SELECT away_team_name as Nome, sum(pontos_visitante) PtsFora
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2]
+GROUP BY away_team_name) f ON c.home_team_name = f.Nome
+GROUP BY home_team_name, PtsFora)*/
+
+/*SELECT home_team_name, SUM(home_team_goal_count) as GOLS_CASA
+FROM DBO.[brazil-serie-a-matches-2022-to-2022-stats v2]
+GROUP BY home_team_name
+
+SELECT away_team_name, sum(away_team_goal_count) as Gols_Fora
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2]
+GROUP BY away_team_name*/
+
+
+/*CREATE VIEW GOLS_FEITOS AS (SELECT home_team_name AS NOME, SUM(home_team_goal_count) as GOLS_CASA, GOLS_FORA, 
+(sum(c.home_team_goal_count) + f.Gols_fora) AS TOTAL_FEITOS
+FROM DBO.[brazil-serie-a-matches-2022-to-2022-stats v2] AS C
+LEFT JOIN (SELECT away_team_name, sum(away_team_goal_count) as Gols_Fora
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2]
+GROUP BY away_team_name) AS F ON C.home_team_name = f.away_team_name
+GROUP BY home_team_name, Gols_Fora)*/
+
+/*CREATE VIEW GOLS_TOMADOS AS (SELECT home_team_name AS Nome, SUM(away_team_goal_count) as GolsTomados_casa, f.GolsTomados_fora,
+(SUM(away_team_goal_count) + f.GolsTomados_fora) as Total_Gols_Tomados
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2] as c
+LEFT JOIN (SELECT away_team_name as Nome, SUM(home_team_goal_count) as GolsTomados_fora 
+FROM dbo.[brazil-serie-a-matches-2022-to-2022-stats v2]
+GROUP BY away_team_name) as f ON c.home_team_name = f.nome
+GROUP BY home_team_name, GolsTomados_fora)*/
+
+/*CREATE VIEW SALDOGOLS AS (SELECT f.Nome, Total_feitos AS Gols_Marcados, total_gols_tomados AS Gols_Tomados, 
+(total_feitos - total_gols_tomados) AS Saldo_Gols
+FROM dbo.Gols_feitos as f
+LEFT JOIN  dbo.Gols_tomados as t on f.nome = t.nome)*/
+
+SELECT p.Nome, p.PtsCasa, p.PtsFora, g.Gols_marcados, g.Gols_tomados, p.TotalPontos, g.Saldo_Gols
+FROM dbo.PontosV2 as p
+LEFT JOIN dbo.SaldoGols as g on p.nome = g.nome
+ORDER BY TotalPontos desc
