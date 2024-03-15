@@ -35,6 +35,10 @@ GROUP BY home_team_name, GolsTomados_fora)*/
 FROM dbo.Gols_feitos as f
 LEFT JOIN  dbo.Gols_tomados as t on f.nome = t.nome)*/
 
+LINK DO RESULTADO: blob:https://web.whatsapp.com/044b1888-a882-446b-8292-223c6f062e6b
+
+
+
 SELECT p.Nome, p.PtsCasa, p.PtsFora, g.Gols_marcados, g.Gols_tomados, p.TotalPontos, g.Saldo_Gols
 FROM dbo.PontosV2 as p
 LEFT JOIN dbo.SaldoGols as g on p.nome = g.nome
