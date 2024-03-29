@@ -1,0 +1,10 @@
+SELECT d.Nome, d.TotalPontos AS Pontos22, t.TotalPontos AS Pontos23, 
+CAST((t.TotalPontos / (d.TotalPontos * 1.0)-1)*100 AS numeric(15,2)) AS Percentual_Pontos,
+d.Gols_marcados AS Gols_Feitos22, T.Gols_marcados AS Gols_Feitos23, 
+CAST(( T.Gols_Marcados / (d.Gols_marcados + 0.)-1)*100  AS NUMERIC(15,2)) AS Percentual_Gols_Feitos,
+d.Gols_tomados AS Gols_Tomados22, t.Gols_tomados AS Gols_Tomados23, 
+CAST(( t.Gols_tomados / (d.gols_tomados +0.)-1)*100 AS NUMERIC(15,2)) AS Percentual_Gols_Tomados,
+d.Saldo_Gols AS Saldo_Gols22, t.Saldo_gols AS Saldo_Gols23 
+FROM dbo.resultado2022 AS d
+INNER JOIN dbo.resultado2023 AS t ON d.nome = t.nome
+ORDER BY d.totalpontos desc
