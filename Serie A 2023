@@ -1,0 +1,34 @@
+/*CREATE VIEW TOTALPONTOS2023 AS (SELECT m.home_team_name, sum(m.pontos_mandante) AS PtsCasa, v.PtsFora, 
+(SUM(m.pontos_mandante) + V.PtsFora) as TotalPontos
+FROM dbo.B2023 AS M
+LEFT JOIN (SELECT away_team_name, SUM(pontos_visitante) AS PtsFora
+FROM dbo.B2023
+GROUP BY away_team_name) AS V ON m.home_team_name = v.away_team_name
+GROUP BY home_team_name, PtsFora)*/
+
+/*CREATE VIEW GOLS_FEITOS2023 AS (SELECT c.home_team_name, SUM(c.home_team_goal_count) AS GolsCASA, GolsFora, 
+(SUM(c.home_team_goal_count) + v.GolsFORA) as GolsTotal
+FROM dbo.B2023 AS C
+LEFT JOIN (SELECT away_team_name, SUM(away_team_goal_count) AS GolsFORA
+FROM dbo.B2023
+GROUP BY away_team_name) as V ON C.home_team_name = V.away_team_name
+GROUP BY home_team_name, GolsFORA)*/
+
+--CREATE VIEW GOLS_TOMADOS_2023 AS (SELECT home_team_name, SUM(c.away_team_goal_count) as GolsTomadaosC, f.GolsTomadosF, 
+--(SUM(c.away_team_goal_count) + f.GolsTomadosF) AS TotalGolsTomados
+--FROM dbo.B2023 AS c
+--LEFT JOIN (SELECT away_team_name, SUM(home_team_goal_count) as GolsTomadosF
+--FROM dbo.B2023
+--GROUP BY away_team_name) AS f ON c.home_team_name = f.away_team_name
+--GROUP BY home_team_name, GolsTomadosF)
+
+
+--CREATE VIEW SALDOGOLS2023 AS (SELECT f.home_team_name AS Nome, f.GolsTotal AS Gols_Marcados, t.TotalGolsTomados AS Gols_tomados, (f.golsTotal - t.totalgolstomados) AS Saldo_Gols
+--FROM dbo.GOLS_FEITOS2023 as f
+--LEFT JOIN GOLS_TOMADOS_2023 as t ON f.home_team_name = t.home_team_name
+--GROUP BY f.home_team_name, f.GolsTotal, t.TotalGolsTomados)
+
+CREATE VIEW RESULTADO2023 AS (SELECT p.home_team_name AS Nome, p.PtsCasa, p.PtsFora, g.Gols_marcados, g.Gols_tomados, p.TotalPontos, g.Saldo_Gols
+FROM dbo.totalpontos2023 AS P
+LEFT JOIN dbo.SALDOGOLS2023 as g ON p.home_team_name = g.nome
+GROUP BY p.home_team_name, ptscasa, ptsfora, gols_marcados, GOLS_TOMADOS, TotalPontos, Saldo_gols)
